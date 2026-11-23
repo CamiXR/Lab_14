@@ -7,4 +7,5 @@
  
 ## Как запустить
 pip install -r requirements.txt
+
 python main.py      # на Ubuntu: python3 main.py
