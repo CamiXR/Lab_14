@@ -1,36 +1,85 @@
-#Задание 1
+import os
+import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
-players = {
-    "name":   ["CamiXR", "TheHellcart", "Meravka", "Cremassor", "Egireon105", "Fiazema2000"],
-    "level":  [60, 55, 52, 78, 71, 33],
-    "klass":  ["Воин", "Маг", "Шаман", "Лучник", "Демонолог", "Паладин"],
-    "donate": [500, 1200, 300, 2400, 1800, 150]
-}
-df = pd.DataFrame(players)
-print(df.head(2))
 
-#Задание 2
-df.to_csv("dataset.csv", index=False, encoding="utf-8")
-df2 = pd.read_csv("dataset.csv", encoding="utf-8")
-df2.info()
+"""Задание 1"""
+os.makedirs("images", exist_ok=True)   # папка для графиков
+days = ["Пн", "Вт", "Ср", "Чт", "Пт"]
+work = [2, 3.5, 7, 5, 9]               # условная сложность задач
+plt.plot(days, work, "o-", color="steelblue", label="Сложность задач")
+plt.xlabel("День недели")
+plt.ylabel("Сложность")
+plt.title("Сложность задач по дням")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.savefig("images/plot1.png", dpi=150)
+plt.show()
 
-#Задание 3
-result = df[(df["level"] > 50) & (df["klass"] == "Маг")]
-print(result)
+"""Задание 2"""
+os.makedirs("images", exist_ok=True)
+np.random.seed(42)                      # фиксируем случайность
+level = np.random.randint(1, 100, 60)   # уровни игроков 1..99
+donates = level * 15 + np.random.normal(0, 200, 60)  # донаты растут с уровнем + шум
 
-#Задание 4
-top = df.sort_values("donate", ascending=False)
+plt.scatter(level, donates, alpha=0.6, color="seagreen")
+plt.xlabel("Уровень игрока")
+plt.ylabel("Сумма донатов, руб.")
+plt.title("Зависимость донатов от уровня")
+plt.grid(True, alpha=0.3)
+plt.savefig("images/scatter_donates.png", dpi=150)
+plt.show()
 
-print(top.head(3))
-#Задание 5
-df["tax"] = df["donate"] * 0.13
-print(df[["name", "donate", "tax"]].head(3))
+"""задание 3"""
+import os
+import matplotlib.pyplot as plt
+os.makedirs("images", exist_ok=True)
+classes = ["Воин", "Маг", "Стрелок", "Паладин"]
+counts  = [14, 9, 11, 6]
+plt.bar(classes, counts, color=["#4C72B0", "#DD8452", "#55A868", "#C44E52"])
+plt.xlabel("Класс персонажа")
+plt.ylabel("Количество игроков")
+plt.title("Распределение игроков по классам")
+plt.savefig("images/bar_classes.png", dpi=150)
+plt.show()
 
-#Задание 6
-avg = df.groupby("klass")["donate"].mean()
-print(avg)
+"""Задание 4"""
+os.makedirs("images", exist_ok=True)
+np.random.seed(7)
+times = np.random.normal(loc=120, scale=25, size=500)  # время задач, мс
+plt.hist(times, bins=30, color="steelblue", edgecolor="black")
+plt.xlabel("Время выполнения, мс")
+plt.ylabel("Количество задач")
+plt.title("Распределение времени выполнения задач")
+plt.savefig("images/hist_times.png", dpi=150)
+plt.show()
+print("Среднее:", times.mean().round(1))
+print("Минимум:", times.min().round(1))
+print("Максимум:", times.max().round(1))
 
-#Задание 7
-rich = df[df["level"] > 50]
-rich.to_csv("rich_players.csv", index=False, encoding="utf-8")
-print("Сохранено:", len(rich), "строк")
+"""Задание 5"""
+os.makedirs("images", exist_ok=True)
+np.random.seed(42)
+x = np.arange(1, 21)                     # 20 точек
+y = x * 3 + np.random.normal(0, 10, 20)  # линия + шум
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+axes[0].plot(x, y, "o-")
+axes[0].set_title("Линейный график")
+axes[0].set_xlabel("Время")
+axes[0].set_ylabel("Значение")
+axes[1].scatter(x, y, color="crimson")
+axes[1].set_title("Точечная диаграмма")
+axes[1].set_xlabel("Время")
+axes[1].set_ylabel("Значение")
+plt.tight_layout()
+plt.savefig("images/subplots.png", dpi=150)
+plt.show()
+
+"""Задание 7"""
+os.makedirs("images", exist_ok=True)
+df = pd.read_csv("dataset.csv")          # ваш датасет из лабы №14
+counts = df["klass"].value_counts()
+plt.bar(counts.index, counts.values, color="slateblue")
+plt.title("Игроки по классам (из Pandas)")
+plt.savefig("images/pandas_bar.png", dpi=150)
+plt.show()
